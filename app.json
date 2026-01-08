@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "256af757-b277-4734-b696-d6cb7b95157f"
+      }
+    },
+    "android": {
+      "package": "com.ar1241.rntbci_new_final"
+    }
+  }
+}

@@ -1,0 +1,137 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+dist/
+build/
+coverage/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.env
+.venv
+venv/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+instance/
+.webassets-cache
+
+# React Native / Expo
+.expo/
+web-build/
+.jsc/
+.watchmanconfig
+
+# Android
+*.iml
+.gradle/
+local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android - App specific
+android/app/build/
+android/.gradle/
+android/local.properties
+android/*.iml
+
+# iOS
+*.mode1v3
+*.mode2v3
+*.mov
+*.news
+*.pbxuser
+*.perspectivev3
+*.trace
+*.xccheckout
+*.xcscmblueprint
+xcuserdata/
+*.xcworkspace/
+!default.xcworkspace
+Pods/
+Podfile.lock
+DerivedData/
+
+# Mobile App Specific (Nested)
+mobile_app/node_modules/
+mobile_app/.expo/
+mobile_app/android/app/build/
+mobile_app/android/.gradle/
+mobile_app/ios/Pods/
+mobile_app/ios/DerivedData/
+
+# Misc
+.docusaurus/
+.serverless/
+.fusebox/
+.dynamodb/
+
+# Local Netlify folder
+.netlify/
+
+# Vercel
+.vercel

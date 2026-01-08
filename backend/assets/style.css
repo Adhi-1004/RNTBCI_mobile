@@ -1,0 +1,797 @@
+/* Global Styles */
+header[data-testid="stHeader"] {
+    display: none;
+}
+
+/* Reduce top padding for main container */
+.block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+/* Main App Background */
+.stApp {
+    background-color: #FFFFFF;
+    color: #1F2937 !important;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+    color: #000000 !important;
+}
+
+/* Buttons */
+.stButton>button,
+.stDownloadButton>button {
+    background: #000000 !important;
+    color: white !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    padding: 0.5em 1em !important;
+    border: 1px solid #000000 !important;
+    transition: 0.3s ease-in-out !important;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.stButton>button:hover,
+.stDownloadButton>button:hover {
+    background: #333333 !important;
+    border-color: #333333 !important;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.stButton>button:focus,
+.stDownloadButton>button:focus,
+.stButton>button:active,
+.stDownloadButton>button:active {
+    background: #000000 !important;
+    color: white !important;
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+}
+
+/* Dark theme button overrides */
+.stApp[data-theme="dark"] .stButton>button,
+.stApp[data-theme="dark"] .stDownloadButton>button,
+[data-theme="dark"] .stButton>button,
+[data-theme="dark"] .stDownloadButton>button,
+html[data-theme="dark"] .stButton>button,
+html[data-theme="dark"] .stDownloadButton>button {
+    background: #000000 !important;
+    color: white !important;
+    border: 1px solid #000000 !important;
+}
+
+.stApp[data-theme="dark"] .stButton>button:hover,
+.stApp[data-theme="dark"] .stDownloadButton>button:hover,
+[data-theme="dark"] .stButton>button:hover,
+[data-theme="dark"] .stDownloadButton>button:hover,
+html[data-theme="dark"] .stButton>button:hover,
+html[data-theme="dark"] .stDownloadButton>button:hover {
+    background: #333333 !important;
+    border-color: #333333 !important;
+}
+
+/* Ensure download button icon/text are visible */
+.stDownloadButton>button svg,
+.stDownloadButton>button span {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+}
+
+.stDownloadButton>button:disabled {
+    background: #E5E7EB !important;
+    color: #6B7280 !important;
+    box-shadow: none;
+}
+
+/* Force button text and icons to be white in all themes */
+.stButton>button span,
+.stButton>button p,
+.stButton>button div,
+.stDownloadButton>button span,
+.stDownloadButton>button p,
+.stDownloadButton>button div {
+    color: #FFFFFF !important;
+}
+
+.stButton>button svg,
+.stDownloadButton>button svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #F9FAFB;
+    border-right: 1px solid #E5E7EB;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #1F2937 !important;
+}
+
+/* Fix ALL input backgrounds */
+input,
+textarea,
+select {
+    background-color: #FFFFFF !important;
+    color: #1F2937 !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 8px !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #000000 !important;
+    box-shadow: 0 0 0 1px #000000 !important;
+}
+
+/* Force selectbox (dropdown) background */
+div[data-baseweb="select"] {
+    background-color: #FFFFFF !important;
+    color: #1F2937 !important;
+    border-radius: 8px !important;
+    border: 1px solid #D1D5DB !important;
+}
+
+div[data-baseweb="select"] * {
+    background-color: #FFFFFF !important;
+    color: #1F2937 !important;
+}
+
+/* Dropdown options list */
+div[data-baseweb="popover"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 8px !important;
+}
+
+div[data-baseweb="popover"] * {
+    background-color: #FFFFFF !important;
+    color: #1F2937 !important;
+}
+
+/* Number input controls */
+div[data-baseweb="input"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 8px !important;
+}
+
+div[data-baseweb="input"] * {
+    background-color: #FFFFFF !important;
+    color: #1F2937 !important;
+}
+
+/* Number input increment/decrement buttons */
+
+button[data-testid="baseButton"] {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: bold !important;
+}
+
+button[data-testid="baseButton"]:hover {
+    background: #333333 !important;
+    color: #FFFFFF !important;
+}
+
+div[data-baseweb="input"] button svg,
+div[data-baseweb="input"] button path {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+}
+
+/* Dark theme overrides for base buttons */
+.stApp[data-theme="dark"] button[data-testid="baseButton"],
+[data-theme="dark"] button[data-testid="baseButton"],
+html[data-theme="dark"] button[data-testid="baseButton"],
+body[data-theme="dark"] button[data-testid="baseButton"] {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+.stApp[data-theme="dark"] button[data-testid="baseButton"]:hover,
+[data-theme="dark"] button[data-testid="baseButton"]:hover,
+html[data-theme="dark"] button[data-testid="baseButton"]:hover,
+body[data-theme="dark"] button[data-testid="baseButton"]:hover {
+    background: #333333 !important;
+    color: #FFFFFF !important;
+}
+
+.stApp[data-theme="dark"] div[data-baseweb="input"] button svg,
+.stApp[data-theme="dark"] div[data-baseweb="input"] button path,
+[data-theme="dark"] div[data-baseweb="input"] button svg,
+[data-theme="dark"] div[data-baseweb="input"] button path,
+html[data-theme="dark"] div[data-baseweb="input"] button svg,
+html[data-theme="dark"] div[data-baseweb="input"] button path,
+body[data-theme="dark"] div[data-baseweb="input"] button svg,
+body[data-theme="dark"] div[data-baseweb="input"] button path {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+}
+
+/* Fix button text color to white */
+.stButton>button span,
+.stButton>button p {
+    color: #FFFFFF !important;
+}
+
+/* Fix button icons to white */
+.stButton>button svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+}
+
+/* File uploader */
+div[data-testid="stFileUploaderDropzone"] {
+    background-color: #F9FAFB !important;
+    border: 2px dashed #D1D5DB !important;
+    border-radius: 10px !important;
+    color: #1F2937 !important;
+}
+
+div[data-testid="stFileUploaderDropzone"] * {
+    color: #1F2937 !important;
+}
+
+/* Extra overrides to ensure dropzone matches theme across versions */
+div[data-testid="stFileUploader"]>div,
+div[data-testid="stFileUploader"]>div>div,
+div[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"],
+div[data-baseweb="file-uploader"] {
+    background-color: #F9FAFB !important;
+    border: 2px dashed #D1D5DB !important;
+    border-radius: 10px !important;
+    color: #1F2937 !important;
+}
+
+div[data-testid="stFileUploader"] * {
+    color: #1F2937 !important;
+}
+
+/* File uploader button styling */
+div[data-testid="stFileUploaderDropzone"] button,
+div[data-testid="stFileUploader"] button {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: bold !important;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+div[data-testid="stFileUploaderDropzone"] button:hover,
+div[data-testid="stFileUploader"] button:hover {
+    background: #333333 !important;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+div[data-testid="stFileUploaderDropzone"] button span,
+div[data-testid="stFileUploader"] button span {
+    color: #FFFFFF !important;
+}
+
+/* Dark theme file uploader button overrides */
+.stApp[data-theme="dark"] div[data-testid="stFileUploaderDropzone"] button,
+.stApp[data-theme="dark"] div[data-testid="stFileUploader"] button,
+[data-theme="dark"] div[data-testid="stFileUploaderDropzone"] button,
+[data-theme="dark"] div[data-testid="stFileUploader"] button,
+html[data-theme="dark"] div[data-testid="stFileUploaderDropzone"] button,
+html[data-theme="dark"] div[data-testid="stFileUploader"] button {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+.stApp[data-theme="dark"] div[data-testid="stFileUploaderDropzone"] button:hover,
+.stApp[data-theme="dark"] div[data-testid="stFileUploader"] button:hover,
+[data-theme="dark"] div[data-testid="stFileUploaderDropzone"] button:hover,
+[data-theme="dark"] div[data-testid="stFileUploader"] button:hover,
+html[data-theme="dark"] div[data-testid="stFileUploaderDropzone"] button:hover,
+html[data-theme="dark"] div[data-testid="stFileUploader"] button:hover {
+    background: #333333 !important;
+}
+
+/* Metrics */
+div[data-testid="stMetricValue"] {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+div[data-testid="stMetricLabel"] {
+    color: #374151 !important;
+    font-weight: 600;
+}
+
+/* Card-like boxes */
+.stTabs,
+.stTab {
+    background-color: #FFFFFF;
+    color: #1F2937 !important;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    border-bottom: 2px solid #E5E7EB;
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: #374151 !important;
+}
+
+.stTabs [aria-selected="true"] {
+    color: #000000 !important;
+    font-weight: 700;
+    border-bottom: 2px solid #000000 !important;
+}
+
+/* Ensure alerts and captions are visible */
+.stAlert div {
+    color: #1F2937 !important;
+}
+
+.stCaption,
+.stMarkdown p,
+label,
+span,
+p {
+    color: #1F2937 !important;
+}
+
+.stButton>button,
+.stDownloadButton>button {
+    color: #FFFFFF !important;
+}
+
+/* Progress bars text visibility */
+div[role="progressbar"],
+div[role="progressbar"] * {
+    color: #1F2937 !important;
+}
+
+/* Toast / Notifications - keep text visible on dark background */
+div[data-testid="stNotification"],
+div[data-testid="stToast"] {
+    background: #000000 !important;
+    /* match button theme */
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    border-radius: 10px !important;
+}
+
+div[data-testid="stNotification"] *,
+div[data-testid="stToast"] *,
+div[data-testid="stNotification"] p,
+div[data-testid="stToast"] p,
+div[data-testid="stNotification"] span,
+div[data-testid="stToast"] span,
+div[data-testid="stNotification"] svg,
+div[data-testid="stToast"] svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+}
+
+div[data-testid="stNotification"] a,
+div[data-testid="stToast"] a {
+    color: #E5E7EB !important;
+    text-decoration: none !important;
+}
+
+/* Bag item styling */
+.bag-item {
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: #F9FAFB;
+    color: #1F2937 !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+
+    .stButton>button,
+    .stDownloadButton>button {
+        padding: 0.6em 1em;
+    }
+
+    h1 {
+        font-size: 1.6em !important;
+    }
+
+    h2 {
+        font-size: 1.3em !important;
+    }
+
+    h3 {
+        font-size: 1.1em !important;
+    }
+}
+
+/* --- HOME PAGE STYLES --- */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #E5E7EB;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.feature-title {
+    color: #000000;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.feature-description {
+    color: #7F8C8D;
+    font-size: 1em;
+    line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+    .feature-card {
+        padding: 16px;
+    }
+}
+
+/* --- GET STARTED PAGE STYLES --- */
+.get-started-container {
+    background: #FFFFFF;
+    min-height: 100vh;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Note: pattern URL usually works fine in CSS file if relative or data URI */
+.get-started-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.main-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    padding: 50px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.welcome-title {
+    color: #000000;
+    font-size: 3.5em;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+}
+
+.welcome-subtitle {
+    color: #64748b;
+    font-size: 1.3em;
+    text-align: center;
+    margin-bottom: 50px;
+    font-weight: 300;
+}
+
+.option-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #000000;
+}
+
+.option-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.option-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 20px;
+    background: #000000;
+    color: white;
+}
+
+.option-title {
+    color: #1e293b;
+    font-size: 1.4em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.option-description {
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.action-button {
+    background: #000000;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    background: #333333;
+}
+
+.back-button {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #475569;
+    border: 2px solid #e2e8f0;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    transform: translateY(-1px);
+}
+
+/* --- LOGIN PAGE STYLES --- */
+.auth-container {
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.auth-logo {
+    text-align: center;
+    margin: 10px 0 25px 0;
+}
+
+.auth-logo img {
+    max-width: 350px;
+    width: 100%;
+    height: auto;
+}
+
+.main-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.8em;
+    font-weight: 800;
+    color: #000000;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.main-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2em;
+    color: #1a1a1a;
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+.form-wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.stTextInput input,
+.stTextInput>div>div>input {
+    border: 1px solid #cccccc !important;
+    border-radius: 4px !important;
+    padding: 12px 16px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 1em !important;
+    height: auto !important;
+    transition: all 0.2s ease;
+}
+
+.stTextInput input:focus,
+.stTextInput>div>div>input:focus {
+    border-color: #000000 !important;
+    box-shadow: none !important;
+    border-width: 2px !important;
+}
+
+.stMarkdown label p {
+    font-size: 0.9em !important;
+    font-size: 0.9em;
+    color: #666;
+    text-align: center;
+}
+
+.toggle-link button {
+    background: transparent !important;
+    color: #000 !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    padding: 0 !important;
+    width: auto !important;
+    border: none !important;
+    display: inline !important;
+}
+
+.toggle-link button:hover {
+    color: #555 !important;
+}
+
+/* --- CAR SELECTION STYLES --- */
+.car-selection-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: transparent;
+    border-radius: 0px;
+    box-shadow: none;
+    border: none;
+}
+
+.car-title {
+    text-align: center;
+    color: #000000;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.car-subtitle {
+    text-align: center;
+    color: #4B5563;
+    font-size: 1.3em;
+    margin-bottom: 40px;
+}
+
+/* Vehicle action buttons styling */
+.vehicle-actions .stButton>button {
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+    width: 100%;
+}
+
+/* First column (Renault Kiger) - filled black button */
+.vehicle-actions [data-testid="column"]:nth-child(1) .stButton>button {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid #000000 !important;
+}
+
+.vehicle-actions [data-testid="column"]:nth-child(1) .stButton>button:hover {
+    background: #333333 !important;
+    border-color: #333333 !important;
+}
+
+/* Second column (Upload) - outlined neutral */
+.vehicle-actions [data-testid="column"]:nth-child(2) .stButton>button {
+    background: transparent !important;
+    color: #1F2937 !important;
+    border: 1px solid #E5E7EB !important;
+}
+
+.vehicle-actions [data-testid="column"]:nth-child(2) .stButton>button:hover {
+    background: #F9FAFB !important;
+    color: #000000 !important;
+    border-color: #D1D5DB !important;
+}
+
+.car-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin: 20px 0;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.car-name {
+    color: #000000;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.car-specs {
+    color: #1F2937;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+    .car-title {
+        font-size: 1.8em;
+    }
+
+    .car-subtitle {
+        font-size: 1.05em;
+        margin-bottom: 20px;
+    }
+
+    .car-card {
+        padding: 18px;
+    }
+}
