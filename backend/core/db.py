@@ -15,7 +15,7 @@ def get_db_connection():
         print("MONGO_URI not found in .env file")
         return None
     
-    connection_string = connection_string.strip()
+    connection_string = connection_string.strip().strip('"').strip("'")
     # Debug: Print first few chars to check scheme
     print(f"DB: Attempting to connect to: {connection_string[:15]}...")
 

@@ -31,6 +31,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi import Request
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    print(f"LOG: {request.method} {request.url}")
+    try:
+        response = await call_next(request)
+        print(f"LOG: Response status: {response.status_code}")
+        return response
+    except Exception as e:
+        print(f"LOG: Request FAILED: {str(e)}")
+        raise e
+
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "Trunk Packing API is running"}
+
 # Models
 class LoginRequest(BaseModel):
     username: str
