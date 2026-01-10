@@ -15,6 +15,10 @@ def get_db_connection():
         print("MONGO_URI not found in .env file")
         return None
     
+    connection_string = connection_string.strip()
+    # Debug: Print first few chars to check scheme
+    print(f"DB: Attempting to connect to: {connection_string[:15]}...")
+
     try:
         # Increase timeout and handle potential DNS/Net errors
         client = pymongo.MongoClient(connection_string, serverSelectionTimeoutMS=2000, tlsAllowInvalidCertificates=True)
