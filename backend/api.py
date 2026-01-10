@@ -100,6 +100,7 @@ def get_bags():
 @app.post("/optimize")
 async def optimize(req: OptimizationRequest):
     # 1. Load Trunk
+    print(f"DEBUG: STEP 1 - Loading Trunk: {req.car_model}")
     trunk = None
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     if req.car_model == "Renault Kiger":
@@ -121,6 +122,7 @@ async def optimize(req: OptimizationRequest):
         raise HTTPException(status_code=400, detail="Trunk could not be loaded")
 
     # 2. Prepare Bags Info
+    print(f"DEBUG: STEP 2 - Preparing Bags (Count: {len(req.bags)})")
     bags_info = []
     for bag in req.bags:
         if bag.type == "Custom":
@@ -130,15 +132,23 @@ async def optimize(req: OptimizationRequest):
         else:
             if not bag.size: continue
             bags_info.append((bag.type, bag.size))
+    
+    # SAFEGUARD: Limit number of bags to prevent Timeout/OOM on Free Tier
+    if len(bags_info) > 6:
+        print(f"DEBUG: Limiting bags from {len(bags_info)} to 6 for stability")
+        bags_info = bags_info[:6]
             
     # 3. Run Optimization
+    print(f"DEBUG: STEP 3 - Starting Optimization with {len(bags_info)} bags")
     try:
         # We don't have the Streamlit progress bar here, so we pass None
         results = optimized_packing(trunk, bags_info, progress_callback=None)
+        print("DEBUG: STEP 3.5 - Optimization Finished")
     except Exception as e:
+        print(f"DEBUG: Optimization CRASHED: {e}")
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Optimization failed: {str(e)}")
 
     # 4. Format Results for Frontend
     # The frontend needs meshes to render. Sending full mesh data (vertices/faces) as JSON is heavy.

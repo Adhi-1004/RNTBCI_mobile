@@ -33,8 +33,8 @@ except (ValueError, ImportError):
 # CLOUD DEPLOYMENT CONFIGURATION
 # --------------------------------------------------------------------------
 IS_CLOUD = True  # Set to True for Render deployment
-MAX_BAGS_CLOUD = 6
-MAX_CANDIDATES_CLOUD = 2000
+MAX_BAGS_CLOUD = 4
+MAX_CANDIDATES_CLOUD = 400
 GRID_STEP_CLOUD = 0.05
 
 # --------------------------------------------------------------------------
