@@ -3,6 +3,8 @@ import { Platform } from 'react-native';
 
 // For Android Emulator, use 10.0.2.2. For iOS Simulator, use localhost.
 // For physical devices, replace with your machine's LAN IP.
+// For Android Emulator, use 10.0.2.2. For iOS Simulator, use localhost.
+// For physical devices, replace with your machine's LAN IP.
 const DEV_URL = 'https://rntbci-mobile.onrender.com';
 
 const client = axios.create({

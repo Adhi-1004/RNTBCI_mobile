@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, StatusBar, ImageBackground, Dimensions } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { COLORS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
+import { ArrowRight } from 'lucide-react-native';
+
+const { width, height } = Dimensions.get('window');
 
 export default function RegisterScreen({ navigation }) {
     const [username, setUsername] = useState('');
@@ -30,37 +33,179 @@ export default function RegisterScreen({ navigation }) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.title}>Create Account</Text>
+        <ImageBackground
+            source={require('../../assets/images/ai_trunk_hero_v3.png')}
+            style={styles.backgroundImage}
+            resizeMode="cover"
+        >
+            <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-                <TextInput style={styles.input} placeholder="Name (Optional)" value={name} onChangeText={setName} />
-                <TextInput style={styles.input} placeholder="Email (Optional)" value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
-                <TextInput style={styles.input} placeholder="Username *" value={username} onChangeText={setUsername} autoCapitalize="none" />
-                <TextInput style={styles.input} placeholder="Password *" value={password} onChangeText={setPassword} secureTextEntry />
+            {/* Dark Overlay for readability */}
+            <View style={styles.overlay}>
+                <View style={styles.container}>
+                    <View style={styles.glassCard}>
+                        <View style={styles.headerContainer}>
+                            <Text style={styles.title}>Create Account</Text>
+                            <Text style={styles.subtitle}>Join us to optimize your trunk</Text>
+                        </View>
 
-                <TouchableOpacity
-                    style={[styles.button, loading && styles.buttonDisabled]}
-                    onPress={handleRegister}
-                    disabled={loading}
-                >
-                    <Text style={styles.buttonText}>{loading ? "Creating..." : "Register"}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Text style={styles.link}>Back to Login</Text>
-                </TouchableOpacity>
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.label}>Name (Optional)</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter your full name"
+                                placeholderTextColor="rgba(255,255,255,0.4)"
+                                value={name}
+                                onChangeText={setName}
+                            />
+                        </View>
+
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.label}>Email (Optional)</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter your email"
+                                placeholderTextColor="rgba(255,255,255,0.4)"
+                                value={email}
+                                onChangeText={setEmail}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                        </View>
+
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.label}>Username *</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Choose a username"
+                                placeholderTextColor="rgba(255,255,255,0.4)"
+                                value={username}
+                                onChangeText={setUsername}
+                                autoCapitalize="none"
+                            />
+                        </View>
+
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.label}>Password *</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Create a password"
+                                placeholderTextColor="rgba(255,255,255,0.4)"
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry
+                            />
+                        </View>
+
+                        <TouchableOpacity
+                            style={[styles.button, loading && styles.buttonDisabled]}
+                            onPress={handleRegister}
+                            disabled={loading}
+                        >
+                            <Text style={styles.buttonText}>{loading ? "Creating Account..." : "Register"}</Text>
+                            {!loading && <ArrowRight color="#000" size={20} />}
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.linkContainer}>
+                            <Text style={styles.linkText}>Already have an account? <Text style={styles.linkBold}>Log In</Text></Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-        </SafeAreaView>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#f5f5f5', justifyContent: 'center' },
-    content: { padding: 20 },
-    title: { fontSize: 32, fontWeight: 'bold', color: '#1a1a1a', marginBottom: 30, textAlign: 'center' },
-    input: { backgroundColor: 'white', padding: 15, borderRadius: 10, marginBottom: 15, borderWidth: 1, borderColor: '#ddd' },
-    button: { backgroundColor: '#0066cc', padding: 15, borderRadius: 10, alignItems: 'center', marginTop: 10 },
+    backgroundImage: {
+        flex: 1,
+        width: width,
+        height: height,
+    },
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.6)', // Darkens the background image
+        justifyContent: 'center',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        padding: SPACING.lg
+    },
+    glassCard: {
+        backgroundColor: 'rgba(20, 20, 20, 0.85)', // Semi-transparent dark card
+        borderRadius: RADIUS.lg,
+        padding: SPACING.xl,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
+        ...SHADOWS.card,
+    },
+    headerContainer: {
+        marginBottom: SPACING.xl,
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#FFFFFF',
+        marginBottom: SPACING.xs,
+        textAlign: 'center'
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#9CA3AF',
+        textAlign: 'center'
+    },
+    inputGroup: {
+        marginBottom: SPACING.md,
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#E5E7EB', // Light gray text
+        marginBottom: SPACING.xs,
+        marginLeft: 4,
+    },
+    input: {
+        backgroundColor: 'rgba(255,255,255,0.08)', // Translucent input
+        padding: SPACING.md,
+        borderRadius: RADIUS.md,
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.1)',
+        fontSize: 16,
+        color: '#FFFFFF',
+    },
+    button: {
+        backgroundColor: COLORS.accent, // Renault Yellow
+        padding: SPACING.md,
+        borderRadius: RADIUS.md,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: SPACING.lg,
+        gap: SPACING.sm,
+        shadowColor: COLORS.accent,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        elevation: 5,
+    },
     buttonDisabled: { opacity: 0.7 },
-    buttonText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
-    link: { marginTop: 20, textAlign: 'center', color: '#0066cc' },
+    buttonText: {
+        color: '#000000', // Black text on yellow button
+        fontSize: 16,
+        fontWeight: '700',
+    },
+    linkContainer: {
+        marginTop: SPACING.xl,
+        alignItems: 'center',
+    },
+    linkText: {
+        color: '#9CA3AF',
+        fontSize: 14,
+    },
+    linkBold: {
+        color: COLORS.accent,
+        fontWeight: '700',
+    }
 });

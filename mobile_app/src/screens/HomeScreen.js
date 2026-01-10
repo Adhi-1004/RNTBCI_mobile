@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, StatusBar, Modal } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, StatusBar } from 'react-native';
 import client from '../api/client';
-import { useAuth } from '../context/AuthContext';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
-import { Car, ArrowRight, Upload, Ruler, Box, User, X, LogOut, Settings } from 'lucide-react-native';
+import { Car, ArrowRight, Upload, Ruler, Box } from 'lucide-react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { readAsStringAsync } from 'expo-file-system/legacy';
 import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
@@ -11,12 +10,6 @@ import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 export default function HomeScreen({ navigation }) {
     const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showProfile, setShowProfile] = useState(false);
-    const { token, user, logout } = useAuth();
-
-    const handleLogout = () => {
-        logout();
-    };
 
     useEffect(() => {
         fetchCars();
@@ -112,9 +105,6 @@ export default function HomeScreen({ navigation }) {
                 <Text style={styles.pageOverline}>PROJECT CONFIGURATION</Text>
                 <Text style={styles.pageTitle}>Select Vehicle Platform</Text>
             </Animated.View>
-            <TouchableOpacity onPress={() => setShowProfile(true)} style={styles.profileButton}>
-                <User color={COLORS.primary} size={24} />
-            </TouchableOpacity>
         </View>
     );
 
@@ -135,51 +125,7 @@ export default function HomeScreen({ navigation }) {
                     showsVerticalScrollIndicator={false}
                 />
             )}
-
-
-            {/* Profile Modal */}
-            <Modal
-                visible={showProfile}
-                animationType="slide"
-                transparent={true}
-                onRequestClose={() => setShowProfile(false)}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContent}>
-                        <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Operative Profile</Text>
-                            <TouchableOpacity onPress={() => setShowProfile(false)}>
-                                <X color={COLORS.text.main} size={24} />
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.profileInfo}>
-                            <View style={styles.avatarCircle}>
-                                <Text style={styles.avatarText}>{user?.username?.charAt(0).toUpperCase() || "U"}</Text>
-                            </View>
-                            <Text style={styles.profileName}>{user?.username || "Guest User"}</Text>
-                            <Text style={styles.profileRole}>Logistics Engineer</Text>
-                        </View>
-
-                        <View style={styles.menuItem}>
-                            <Settings size={20} color={COLORS.text.muted} />
-                            <Text style={styles.menuText}>System Settings</Text>
-                            <ArrowRight size={16} color={COLORS.text.muted} style={{ marginLeft: 'auto' }} />
-                        </View>
-
-                        <View style={[styles.menuItem, { opacity: 0.5 }]}>
-                            <Box size={20} color={COLORS.text.muted} />
-                            <Text style={styles.menuText}>History (Coming Soon)</Text>
-                        </View>
-
-                        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                            <LogOut size={20} color={COLORS.error} />
-                            <Text style={styles.logoutText}>Sign Out</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-        </View >
+        </View>
     );
 }
 
@@ -207,6 +153,13 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: COLORS.primary,
         letterSpacing: -0.5,
+    },
+    headerContainer: {
+        marginTop: SPACING.xl,
+        marginBottom: SPACING.lg,
+    },
+    headerTextContainer: {
+        flex: 1,
     },
 
     // Tech Card Styles
@@ -284,104 +237,4 @@ const styles = StyleSheet.create({
     cornerMarkerTR: { position: 'absolute', top: 0, right: 0, width: 8, height: 8, borderTopWidth: 2, borderRightWidth: 2, borderColor: COLORS.accent },
     cornerMarkerBL: { position: 'absolute', bottom: 0, left: 0, width: 8, height: 8, borderBottomWidth: 2, borderLeftWidth: 2, borderColor: COLORS.accent },
     cornerMarkerBR: { position: 'absolute', bottom: 0, right: 0, width: 8, height: 8, borderBottomWidth: 2, borderRightWidth: 2, borderColor: COLORS.accent },
-
-    // Modal Styles
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginTop: SPACING.xl,
-        marginBottom: SPACING.lg,
-    },
-    headerTextContainer: {
-        flex: 1,
-    },
-    profileButton: {
-        padding: 8,
-        backgroundColor: '#FFFFFF',
-        borderRadius: RADIUS.md,
-        ...SHADOWS.button,
-        marginTop: 4,
-    },
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        justifyContent: 'flex-end',
-    },
-    modalContent: {
-        backgroundColor: COLORS.surface,
-        borderTopLeftRadius: RADIUS.xl,
-        borderTopRightRadius: RADIUS.xl,
-        padding: SPACING.xl,
-        minHeight: 400,
-        ...SHADOWS.card,
-    },
-    modalHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: SPACING.xl,
-    },
-    modalTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: COLORS.text.main,
-    },
-    profileInfo: {
-        alignItems: 'center',
-        marginBottom: SPACING.xl,
-    },
-    avatarCircle: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        backgroundColor: COLORS.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: SPACING.md,
-        borderWidth: 2,
-        borderColor: COLORS.accent,
-    },
-    avatarText: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: COLORS.accent,
-    },
-    profileName: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: COLORS.text.main,
-    },
-    profileRole: {
-        fontSize: 14,
-        color: COLORS.text.muted,
-    },
-    menuItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: SPACING.md,
-        borderBottomWidth: 1,
-        borderBottomColor: COLORS.border,
-        gap: SPACING.md,
-    },
-    menuText: {
-        fontSize: 16,
-        color: COLORS.text.main,
-        fontWeight: '500',
-    },
-    logoutButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: SPACING.xxl,
-        padding: SPACING.md,
-        backgroundColor: '#FEF2F2',
-        borderRadius: RADIUS.md,
-        gap: SPACING.sm,
-    },
-    logoutText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: COLORS.error,
-    }
 });

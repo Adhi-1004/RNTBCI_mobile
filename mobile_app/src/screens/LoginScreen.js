@@ -24,7 +24,7 @@ export default function LoginScreen({ navigation }) {
 
     return (
         <ImageBackground
-            source={require('../../assets/images/digital_trunk_hero.png')}
+            source={require('../../assets/images/ai_trunk_hero_v3.png')}
             style={styles.backgroundImage}
             resizeMode="cover"
         >

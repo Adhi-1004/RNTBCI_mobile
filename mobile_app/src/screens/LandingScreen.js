@@ -72,7 +72,7 @@ export default function LandingScreen({ navigation }) {
                     <View style={styles.heroImageContainer}>
                         <Animated.Image
                             entering={ZoomIn.delay(400).springify()}
-                            source={require('../../assets/images/digital_trunk_hero.png')}
+                            source={require('../../assets/images/ai_trunk_hero_v3.png')}
                             style={styles.heroImage}
                             resizeMode="contain"
                         />

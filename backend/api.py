@@ -18,7 +18,7 @@ from core.engine import (
     optimized_packing
 )
 
-from core.db import authenticate_user, save_user
+from core.db import authenticate_user, save_user, save_history, get_history
 
 app = FastAPI()
 
@@ -51,18 +51,25 @@ class OptimizationRequest(BaseModel):
     car_model: str # "Renault Kiger" or "Custom"
     bags: List[BagItem]
     custom_trunk_file: Optional[str] = None # Base64 encoded STL if custom
+    username: Optional[str] = None
 
 # Auth Endpoints
 @app.post("/auth/login")
 async def login(req: LoginRequest):
+    print(f"LOGIN ATTEMPT: username={req.username}")
     if authenticate_user(req.username, req.password):
+        print(f"LOGIN SUCCESS: {req.username}")
         return {"success": True, "message": "Login successful"}
+    print(f"LOGIN FAILED: {req.username}")
     raise HTTPException(status_code=401, detail="Invalid credentials")
 
 @app.post("/auth/register")
 async def register(req: RegisterRequest):
+    print(f"REGISTER ATTEMPT: username={req.username}, email={req.email}")
     if save_user(req.username, req.password, req.email or "", req.name or ""):
+        print(f"REGISTER SUCCESS: {req.username}")
         return {"success": True, "message": "Registration successful"}
+    print(f"REGISTER FAILED: {req.username} (User exists or DB error)")
     raise HTTPException(status_code=400, detail="Username already exists or database error")
 
 # Data Endpoints
@@ -94,9 +101,11 @@ def get_bags():
 async def optimize(req: OptimizationRequest):
     # 1. Load Trunk
     trunk = None
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     if req.car_model == "Renault Kiger":
         try:
-            with open("Surface model (1).stl", "rb") as f:
+            model_path = os.path.join(BASE_DIR, "Surface model (1).stl")
+            with open(model_path, "rb") as f:
                 trunk = load_trunk(f.read())
         except FileNotFoundError:
              raise HTTPException(status_code=500, detail="Default car model file not found on server")
@@ -174,7 +183,7 @@ async def optimize(req: OptimizationRequest):
         scene_mesh.export(s_io, file_type="stl")
         packed_stl = base64.b64encode(s_io.getvalue()).decode('utf-8')
 
-    return {
+    response_payload = {
         "success": True,
         "placed_bags": placed_items,
         "unplaced_bags": results["unplaced_bags_info"],
@@ -183,6 +192,16 @@ async def optimize(req: OptimizationRequest):
         "packed_stl": packed_stl,
         "processing_time": results.get("processing_time", 0.0)
     }
+
+    # 5. Save History
+    if req.username:
+        save_history(req.username, req.car_model, stats)
+    
+    return response_payload
+
+@app.get("/history/{username}")
+def get_user_history(username: str):
+    return get_history(username)
 
 if __name__ == "__main__":
     import uvicorn

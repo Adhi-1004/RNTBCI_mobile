@@ -11,6 +11,8 @@ import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import HistoryScreen from './src/screens/HistoryScreen';
 
 import { useGLTF } from '@react-three/drei/native';
 
@@ -41,6 +43,8 @@ function RootNavigator() {
                 <>
                     <Stack.Screen name="Home" component={HomeScreen} />
                     <Stack.Screen name="Dashboard" component={DashboardScreen} />
+                    <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerTitle: 'System Settings' }} />
+                    <Stack.Screen name="History" component={HistoryScreen} options={{ headerTitle: 'Packing History' }} />
                 </>
             )}
         </Stack.Navigator>

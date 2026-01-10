@@ -276,7 +276,8 @@ export default function DashboardScreen() {
             const payload = {
                 car_model: car,
                 bags: selectedBags,
-                custom_trunk_file: customTrunkFile
+                custom_trunk_file: customTrunkFile,
+                username: user?.username
             };
             const res = await client.post('/optimize', payload);
             if (res.data.success) {
