@@ -1,7 +1,18 @@
 import os
 import pymongo
 import hashlib
+import logging
 from dotenv import load_dotenv
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -12,23 +23,27 @@ def get_db_connection():
     # Connection string from environment variable
     connection_string = os.getenv("MONGO_URI")
     if not connection_string:
-        print("MONGO_URI not found in .env file")
+        logger.error("MONGO_URI not found in .env file")
         return None
     
-    connection_string = connection_string.strip().strip('"').strip("'")
-    # Debug: Print first few chars to check scheme
-    print(f"DB: Attempting to connect to: {connection_string[:15]}...")
+    # Masking the connection string for logs
+    masked_conn_string = connection_string.strip().strip('"').strip("'")
+    if len(masked_conn_string) > 15:
+         masked_conn_string = masked_conn_string[:15] + "..."
+    
+    logger.info(f"DB: Attempting to connect to: {masked_conn_string}")
 
     try:
         # Increase timeout and handle potential DNS/Net errors
-        client = pymongo.MongoClient(connection_string, serverSelectionTimeoutMS=2000, tlsAllowInvalidCertificates=True)
+        clean_connection_string = connection_string.strip().strip('"').strip("'")
+        client = pymongo.MongoClient(clean_connection_string, serverSelectionTimeoutMS=2000, tlsAllowInvalidCertificates=True)
         # Verify connection
         client.admin.command('ping')
         db = client["TrunkRTNBCI"] # Database name
-        print("DB: Successfully connected to MongoDB")
+        logger.info("DB: Successfully connected to MongoDB")
         return db
     except Exception as e:
-        print(f"DB: Failed to connect to MongoDB: {e}")
+        logger.error(f"DB: Failed to connect to MongoDB: {e}")
         return None
 
 def hash_password(password):

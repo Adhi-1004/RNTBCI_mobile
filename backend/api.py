@@ -18,9 +18,15 @@ from core.engine import (
     optimized_packing
 )
 
-from core.db import authenticate_user, save_user, save_history, get_history
+from core.db import authenticate_user, save_user, save_history, get_history, get_db_connection
 
 app = FastAPI()
+
+@app.on_event("startup")
+async def startup_event():
+    print("LOG: Server starting up...")
+    # Check DB connection to trigger logs
+    get_db_connection()
 
 # CORS configuration
 app.add_middleware(
