@@ -53,8 +53,10 @@ def _get_trunk_voxels(trunk_mesh, pitch):
     key = (id(trunk_mesh), float(pitch))
     vox = _trunk_voxel_cache.get(key)
     if vox is None:
+        logger.debug(f"Voxelizing trunk pitch={pitch}...")
         vox = trunk_mesh.voxelized(pitch=pitch)
         _trunk_voxel_cache[key] = vox
+        logger.debug("Voxelization complete.")
     return vox
 
 def strict_containment_or_voxel(trunk_mesh, bag_mesh, voxel_pitch=0.01):
@@ -151,16 +153,24 @@ def unique_rotations(bag_mesh, tol=1e-6):
         unique_extents.add(tuple(np.round(perm, 6)))
     return [box(extents=ext) for ext in unique_extents]
 
+import logging
+logger = logging.getLogger(__name__)
+
 def load_trunk(file_content):
+    logger.info("Loading trunk mesh from bytes...")
     trunk = trimesh.load_mesh(BytesIO(file_content), file_type='stl')
+    logger.info(f"Trunk loaded. Vertices: {len(trunk.vertices)}, Faces: {len(trunk.faces)}")
     if trunk.extents.max() > 10:
+        logger.info("Scaling trunk down...")
         trunk.apply_scale(0.001)
     trunk.apply_translation(-trunk.centroid)
     trunk.apply_translation([0, 0, -trunk.bounds[0][2]])
     R = trimesh.transformations.rotation_matrix(np.pi / 2, [1, 0, 0])
     trunk.apply_transform(R)
     if not trunk.is_watertight:
+        logger.info("Trunk is not watertight. Filling holes...")
         trunk.fill_holes()
+        logger.info("Holes filled.")
     return trunk
 
 def fittest_placement(trunk, bags_info, progress_callback=None):
@@ -391,9 +401,12 @@ def fill_remaining_gaps(trunk, placed_bags_info, bags_info, step_size=0.02):
     return placed_bags_info
 
 def optimized_packing(trunk, bags_info, progress_callback=None):
+    logger.info("Starting optimized_packing...")
     start_time = time.time()
     if progress_callback: progress_callback(0.0, "🔎 Finding initial placements (0/0)...")
+    logger.info("Calling fittest_placement...")
     results = fittest_placement(trunk, bags_info, progress_callback)
+    logger.info("fittest_placement finished.")
     placed_bags_info = results["placed_bags_info"]
     if not placed_bags_info:
         results_dict = {"placed_bags_info": [], "unplaced_bags_info": results["unplaced_bags_info"], "processing_time": float(time.time() - start_time)}

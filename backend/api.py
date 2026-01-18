@@ -39,15 +39,20 @@ app.add_middleware(
 
 from fastapi import Request
 
+import logging
+
+# Configure logger
+logger = logging.getLogger(__name__)
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    print(f"LOG: {request.method} {request.url}")
+    logger.info(f"LOG: {request.method} {request.url}")
     try:
         response = await call_next(request)
-        print(f"LOG: Response status: {response.status_code}")
+        logger.info(f"LOG: Response status: {response.status_code}")
         return response
     except Exception as e:
-        print(f"LOG: Request FAILED: {str(e)}")
+        logger.error(f"LOG: Request FAILED: {str(e)}")
         raise e
 
 @app.get("/")
@@ -79,20 +84,20 @@ class OptimizationRequest(BaseModel):
 # Auth Endpoints
 @app.post("/auth/login")
 async def login(req: LoginRequest):
-    print(f"LOGIN ATTEMPT: username={req.username}")
+    logger.info(f"LOGIN ATTEMPT: username={req.username}")
     if authenticate_user(req.username, req.password):
-        print(f"LOGIN SUCCESS: {req.username}")
+        logger.info(f"LOGIN SUCCESS: {req.username}")
         return {"success": True, "message": "Login successful"}
-    print(f"LOGIN FAILED: {req.username}")
+    logger.warning(f"LOGIN FAILED: {req.username}")
     raise HTTPException(status_code=401, detail="Invalid credentials")
 
 @app.post("/auth/register")
 async def register(req: RegisterRequest):
-    print(f"REGISTER ATTEMPT: username={req.username}, email={req.email}")
+    logger.info(f"REGISTER ATTEMPT: username={req.username}, email={req.email}")
     if save_user(req.username, req.password, req.email or "", req.name or ""):
-        print(f"REGISTER SUCCESS: {req.username}")
+        logger.info(f"REGISTER SUCCESS: {req.username}")
         return {"success": True, "message": "Registration successful"}
-    print(f"REGISTER FAILED: {req.username} (User exists or DB error)")
+    logger.warning(f"REGISTER FAILED: {req.username} (User exists or DB error)")
     raise HTTPException(status_code=400, detail="Username already exists or database error")
 
 # Data Endpoints
@@ -123,7 +128,7 @@ def get_bags():
 @app.post("/optimize")
 async def optimize(req: OptimizationRequest):
     # 1. Load Trunk
-    print(f"DEBUG: STEP 1 - Loading Trunk: {req.car_model}")
+    logger.info(f"DEBUG: STEP 1 - Loading Trunk: {req.car_model}")
     trunk = None
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     if req.car_model == "Renault Kiger":
@@ -132,6 +137,7 @@ async def optimize(req: OptimizationRequest):
             with open(model_path, "rb") as f:
                 trunk = load_trunk(f.read())
         except FileNotFoundError:
+             logger.error("Default car model file not found on server")
              raise HTTPException(status_code=500, detail="Default car model file not found on server")
     elif req.car_model == "Custom" and req.custom_trunk_file:
          # Decode base64
@@ -139,13 +145,15 @@ async def optimize(req: OptimizationRequest):
              file_bytes = base64.b64decode(req.custom_trunk_file.split(",")[1] if "," in req.custom_trunk_file else req.custom_trunk_file)
              trunk = load_trunk(file_bytes)
          except Exception:
+             logger.error("Invalid custom trunk file")
              raise HTTPException(status_code=400, detail="Invalid custom trunk file")
     
     if not trunk:
+        logger.error("Trunk could not be loaded")
         raise HTTPException(status_code=400, detail="Trunk could not be loaded")
 
     # 2. Prepare Bags Info
-    print(f"DEBUG: STEP 2 - Preparing Bags (Count: {len(req.bags)})")
+    logger.info(f"DEBUG: STEP 2 - Preparing Bags (Count: {len(req.bags)})")
     bags_info = []
     for bag in req.bags:
         if bag.type == "Custom":
@@ -158,17 +166,17 @@ async def optimize(req: OptimizationRequest):
     
     # SAFEGUARD: Limit number of bags to prevent Timeout/OOM on Free Tier
     if len(bags_info) > 6:
-        print(f"DEBUG: Limiting bags from {len(bags_info)} to 6 for stability")
+        logger.warning(f"DEBUG: Limiting bags from {len(bags_info)} to 6 for stability")
         bags_info = bags_info[:6]
             
     # 3. Run Optimization
-    print(f"DEBUG: STEP 3 - Starting Optimization with {len(bags_info)} bags")
+    logger.info(f"DEBUG: STEP 3 - Starting Optimization with {len(bags_info)} bags")
     try:
         # We don't have the Streamlit progress bar here, so we pass None
         results = optimized_packing(trunk, bags_info, progress_callback=None)
-        print("DEBUG: STEP 3.5 - Optimization Finished")
+        logger.info("DEBUG: STEP 3.5 - Optimization Finished")
     except Exception as e:
-        print(f"DEBUG: Optimization CRASHED: {e}")
+        logger.error(f"DEBUG: Optimization CRASHED: {e}")
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Optimization failed: {str(e)}")

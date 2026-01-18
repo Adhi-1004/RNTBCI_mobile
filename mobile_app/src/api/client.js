@@ -1,11 +1,8 @@
 import axios from 'axios';
 import { Platform } from 'react-native';
 
-// For Android Emulator, use 10.0.2.2. For iOS Simulator, use localhost.
-// For physical devices, replace with your machine's LAN IP.
-// For Android Emulator, use 10.0.2.2. For iOS Simulator, use localhost.
-// For physical devices, replace with your machine's LAN IP.
-const DEV_URL = 'https://rntbci-mobile.onrender.com';
+// Backend hosted on Hugging Face Spaces
+const DEV_URL = 'https://adhi2005-rntbci-mobile.hf.space';
 
 const client = axios.create({
     baseURL: DEV_URL,
