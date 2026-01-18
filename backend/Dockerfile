@@ -8,6 +8,9 @@ WORKDIR /code
 # Copy the current directory contents into the container at /code
 COPY ./requirements.txt /code/requirements.txt
 
+# Install system dependencies for Rtree (libspatialindex)
+RUN apt-get update && apt-get install -y libspatialindex-dev
+
 # Install the requirements
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 

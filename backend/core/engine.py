@@ -3,6 +3,19 @@ import numpy as np
 from trimesh.creation import box
 import itertools
 import time
+
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+try:
+    import rtree
+    logger.info("Rtree imported successfully")
+except ImportError:
+    logger.error("Failed to import Rtree. Containment checks will fail.")
+
 from io import BytesIO
 
 # Fallback Class for environments without FCL
@@ -33,9 +46,9 @@ except (ValueError, ImportError):
 # CLOUD DEPLOYMENT CONFIGURATION
 # --------------------------------------------------------------------------
 IS_CLOUD = True  # Set to True for Render deployment
-MAX_BAGS_CLOUD = 4
-MAX_CANDIDATES_CLOUD = 400
-GRID_STEP_CLOUD = 0.05
+MAX_BAGS_CLOUD = 8 # Increased from 4
+MAX_CANDIDATES_CLOUD = 2000 # Increased from 400 to allow more thorough search
+GRID_STEP_CLOUD = 0.03 # Decreased from 0.05 for finer resolution
 
 # --------------------------------------------------------------------------
 # CORE LOGIC (PACKING, BAGS, TRUNK)
@@ -231,9 +244,10 @@ def fittest_placement(trunk, bags_info, progress_callback=None):
                     if stop_bag_search: break
                     for x in x_range:
                         checks += 1
-                        if checks > max_checks:
-                            stop_bag_search = True
-                            break
+                        # CLOUD SAFEGUARD: Relaxed limit for HF Spaces
+                        # if checks > max_checks:
+                        #     stop_bag_search = True
+                        #     break
 
                         trial = bag_rotation.copy()
                         trial.apply_translation([x - trial.bounds[0][0], y - trial.bounds[0][1], z - trial.bounds[0][2]])
