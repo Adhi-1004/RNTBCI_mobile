@@ -118,7 +118,8 @@ import CarLoading from '../components/CarLoading';
 // Polyfill for Buffer
 global.Buffer = Buffer;
 
-function MeshViewer({ stlBase64, color, opacity = 1.0, wireframe = false, transparent = false }) {
+// Trunk Viewer for STL
+function TrunkViewer({ stlBase64, color, opacity = 1.0, wireframe = false, transparent = false }) {
     const geometry = useMemo(() => {
         if (!stlBase64) return null;
         try {
@@ -126,15 +127,14 @@ function MeshViewer({ stlBase64, color, opacity = 1.0, wireframe = false, transp
             const buffer = Buffer.from(stlBase64, 'base64');
             const arrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
             const geom = loader.parse(arrayBuffer);
-            if (geom && geom.attributes && geom.attributes.position) {
+            if (geom) {
                 geom.computeVertexNormals();
-                geom.computeBoundingBox();
-                geom.computeBoundingSphere();
+                geom.center(); // Center the geometry
                 return geom;
             }
             return null;
         } catch (e) {
-            console.error("Failed to parse STL", e);
+            console.error("TrunkViewer: Failed to parse STL", e);
             return null;
         }
     }, [stlBase64]);
@@ -155,6 +155,28 @@ function MeshViewer({ stlBase64, color, opacity = 1.0, wireframe = false, transp
         </mesh>
     );
 }
+
+// Box Viewer for Bags (Lightweight)
+function BoxViewer({ dimensions, position, color, opacity = 1.0, wireframe = false, transparent = false }) {
+    // 🛡️ CRITICAL GUARDRAIL: Prevent crash on invalid dimensions
+    if (!dimensions || dimensions.length !== 3 || dimensions.some(d => d <= 0)) return null;
+    if (!position || position.length !== 3) return null;
+
+    return (
+        <mesh position={position}>
+            <boxGeometry args={dimensions} />
+            <meshStandardMaterial
+                color={color}
+                opacity={opacity}
+                transparent={transparent}
+                wireframe={wireframe}
+                metalness={0.1}
+                roughness={0.8}
+            />
+        </mesh>
+    );
+}
+
 
 export default function DashboardScreen() {
     const navigation = useNavigation();
@@ -637,31 +659,70 @@ export default function DashboardScreen() {
                                         <spotLight position={[-10, -10, -10]} angle={0.15} penumbra={1} />
                                         <OrbitControls makeDefault autoRotate autoRotateSpeed={0.5} />
                                         <group position={[0, -0.5, 0]}>
+                                            {(() => {
+                                                // Auto-scaling logic (Technical Fix)
+                                                // 1. Get Trunk Dimensions
+                                                const dims = optimizationResult.trunk_dimensions || [100, 100, 100];
+                                                const center = optimizationResult.trunk_center || [0, 0, 0];
 
-                                            {optimizationResult.trunk_mesh && (
-                                                <MeshViewer
-                                                    stlBase64={optimizationResult.trunk_mesh}
-                                                    color="#9CA3AF"
-                                                    opacity={0.15}
-                                                    transparent={true}
-                                                />
-                                            )}
-                                            {optimizationResult.placed_bags.map((bag, index) => {
-                                                const colors = [
-                                                    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
-                                                    '#FFEEAD', '#FFD93D', '#FF9F1C', '#2AB7CA',
-                                                    '#E27D60', '#85DCBA', '#E8A87C', '#C38D9E'
+                                                // 2. Calculate Scale to fit within standard view (approx 2.5 units)
+                                                const maxDim = Math.max(...dims);
+                                                const scale = maxDim > 0 ? 2.5 / maxDim : 1;
+
+                                                // 3. Adjust Position to center the scene
+                                                const adjustedPosition = [
+                                                    -center[0] * scale,
+                                                    -center[1] * scale,
+                                                    -center[2] * scale
                                                 ];
-                                                const color = colors[index % colors.length];
+
                                                 return (
-                                                    <MeshViewer
-                                                        key={index}
-                                                        stlBase64={bag.mesh_stl}
-                                                        color={color}
-                                                        opacity={1}
-                                                    />
+                                                    <group position={adjustedPosition} scale={[scale, scale, scale]}>
+                                                        {/* Render Trunk Results */}
+                                                        {optimizationResult.trunk_mesh ? (
+                                                            <TrunkViewer
+                                                                stlBase64={optimizationResult.trunk_mesh}
+                                                                color="#9CA3AF"
+                                                                opacity={0.3}
+                                                                transparent={true}
+                                                                wireframe={true}
+                                                            />
+                                                        ) : (
+                                                            // Fallback Wireframe Box
+                                                            optimizationResult.trunk_dimensions && (
+                                                                <BoxViewer
+                                                                    dimensions={optimizationResult.trunk_dimensions}
+                                                                    position={center}
+                                                                    color="#9CA3AF"
+                                                                    opacity={0.3}
+                                                                    transparent={true}
+                                                                    wireframe={true}
+                                                                />
+                                                            )
+                                                        )}
+
+                                                        {/* Render Placed Bags */}
+                                                        {optimizationResult.placed_bags.map((bag, index) => {
+                                                            const colors = [
+                                                                '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
+                                                                '#FFEEAD', '#FFD93D', '#FF9F1C', '#2AB7CA',
+                                                                '#E27D60', '#85DCBA', '#E8A87C', '#C38D9E'
+                                                            ];
+                                                            const color = colors[index % colors.length];
+
+                                                            return (
+                                                                <BoxViewer
+                                                                    key={bag.id || index}
+                                                                    dimensions={bag.dimensions}
+                                                                    position={bag.position}
+                                                                    color={color}
+                                                                    opacity={1}
+                                                                />
+                                                            );
+                                                        })}
+                                                    </group>
                                                 );
-                                            })}
+                                            })()}
                                         </group>
                                         <Environment preset="city" />
                                     </React.Suspense>
